@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Book Store</title>
+    <style>
+      body {
+        background-color: #ffffff;
+      }
+      .navbar {
+        margin-bottom: 20px;
+      }
+      .navbar-bg{
+          background-color: #000080;
+      }
+      .container h1 {
+        margin-bottom: 20px;
+        color: #343a40;
+      }
+      .container h6 {
+        margin-bottom: 30px;
+        color: #6c757d;
+      }
+      :root {
+        --font-color: rgba(0, 0, 0, 0.9);
+        --bg-color: #fff;
+        --primary-color: rgba(0, 0, 0, 1);
+        --secondary-color: rgba(0, 0, 0, 0.5);
+        --light-bg-color: rgba(0, 0, 0, 0.1);
+      }
+
+* {
+  box-sizing: border-box;
+  outline: 0;
+  border: 0;
+  font-family: Montserrat, "Roboto", "Noto", sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--light-bg-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+::placeholder {
+  color: var(--secondary-color);
+  text-overflow: ellipsis;
+  transition: all 0.2s;
+}
+
+::selection {
+  background: var(--primary-color);
+  color: var(--bg-color);
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomin {
+  from {
+    opacity: 0;
+    transform: translate(0, -64px) scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, -64px) scale(1);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.2s;
+  animation: fadein 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+aside {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 32px;
+  width: 20%;
+  height: 100%;
+  left: -250px;
+  background-color: var(--bg-color);
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.logo {
+  padding: 0 32px;
+  font-weight: 900;
+  font-size: 24px;
+}
+
+.subhead {
+  padding: 32px;
+  color: var(--secondary-color);
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.nav {
+  display: flex;
+  margin: 8px 0;
+  padding: 16px 32px;
+  border-radius: 32px;
+  background-color: var(--bg-color);
+  font-weight: 600;
+  transition: all 0.2s;
+  align-items: center;
+}
+
+.nav .icon {
+  margin-right: 16px;
+}
+
+.nav.current {
+  background: var(--primary-color);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
+  color: var(--bg-color);
+}
+
+.nav:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search,
+.prev {
+  display: none;
+}
+
+.trigger {
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  aside {
+    position: sticky;
+    padding: 16px;
+    width: 100%;
+    height: auto;
+  }
+}
+
+aside.active {
+    left: 0;
+}
+
+.book-list {
+    margin-left: 270px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.book-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: calc(33.333% - 20px); /* Adjust this based on the number of columns */
+    box-sizing: border-box;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.book-cover img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.book-info {
+    text-align: center;
+}
+
+.book-info h3 {
+    font-size: 1.2em;
+    margin: 0 0 10px;
+}
+
+.book-info p {
+    margin: 0 0 10px;
+}
+
+.book-info button {
+    background: #f00;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.book-info button:hover {
+    background: #c00;
+}
+    </style>
+  </head>
+  <body>
+       <div id="menuToggle" class="menu-toggle">
+        &#9776;
+    </div>
+      <aside id="sidebar">
+      <div class="logo">    
+          Book Store
+      </div>
+      <nav>
+        <ul>
+          <li class="subhead">DISCOVER</li>
+          <li>
+            <a class="nav scrolltoview current" href="#search"
+              ><span class="icon">🔍</span>Search</a
+            >
+          </li>
+          <li class="subhead">Mục lục</li>
+          <li>
+            <a class="nav scrolltoview" href="available_books"
+              ><span class="icon">💖</span>Sách thư viện</a
+            >
+          </li>
+          <li>
+            <a class="nav scrolltoview" href="my_books"
+              ><span class="icon">👽</span>Giỏ hàng</a
+            >
+          </li>
+          <li>
+            <a class="nav scrolltoview" href="book_register"
+              ><span class="icon">🌈</span>Đăng ký sách mới</a
+            >
+          </li>
+          <li>
+            <a class="nav scrolltoview" href="hoa_don"
+              ><span class="icon">🌺</span>Lịch sử thanh toán</a
+            >
+          </li>
+          <li class="nav trigger"><span class="icon">✨</span>More</li>
+        </ul>
+      </nav>
+    </aside>
+      
+      <div class="book-list">
+        <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b1.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>The Women: A Novel</h3>
+                <p>Kristin Hannah</p>
+                <p>Giá 100.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+        <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b2.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>The Lost Book of Herbal Remedies</h3>
+                <p>Claude Davis</p>
+                <p>Giá 150.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+         <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b3.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>The 48 Laws of Power</h3>
+                <p>Robert Greene</p>
+                <p>Giá 900.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+        <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b4.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>Summer Brain Quest: Between Grades 2 & 3</h3>
+                <p> Workman Publishing (Author), Persephone Walker (Author), Claire Piddock (Author), Jane Ching Fung (Editor), & 2 more</p>
+                <p>Giá 150.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+         <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b5.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>It Was You All Along</h3>
+                <p>Russ</p>
+                <p>Giá 500.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+          <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b6.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>Tell Me Your Life Story, Dad: A Father’s Guided Journal and Memory Keepsake Book (Tell Me Your Life Story® Series Books)</h3>
+                <p>Questions About Me</p>
+                <p>Giá 810.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+          <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b7.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>The Body Keeps the Score: Brain, Mind, and Body in the Healing of Trauma</h3>
+                <p>Bessel van der Kolk M.D.</p>
+                <p>Giá 122.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+          <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b8.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>Iron Flame (The Empyrean, 2)</h3>
+                <p>Rebecca Yarros</p>
+                <p>Giá 221.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+          
+          <div class="book-item">
+            <div class="book-cover">
+                <img src="/images/b9.jpg" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h3>Swan Song</h3>
+                <p>Elin Hilderbrand</p>
+                <p>Giá 430.000 VND</p>
+                <button>Đặt ngay</button>
+                <button>Xem chi tiết</button>
+            </div>
+        </div>
+      </div>
+      <script>
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  </body>
+</html>
